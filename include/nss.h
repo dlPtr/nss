@@ -13,7 +13,7 @@ typedef enum {
 #define NSS_BADPARA -3
 #define NSS_ARGERR  -4
 
-#define SCRIPT_DIR  "./scripts/"
+#define HTTP_SCRIPT_DIR  "./scripts/http/"
 #define SAMPLE_DIR  "./.samples/"
 
 /* Run!! */

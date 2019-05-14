@@ -23,7 +23,7 @@ void nss_print_version(void)
 
 void nss_print_usage(void)
 {
-    system("cat nss.figlet | lolcat");
+    system("cat nss.figlet | lolcat || cat nss.figlet");
     
     // putchar(10);
 
@@ -76,7 +76,7 @@ void nss_print_usage(void)
 
     puts("\nAnalyze options:");
     printf("  %-15s\t%-s\n",\
-"--script=xx.py", "使用xx.py对捕获到的http包进行分析");
+"--script-http=xx.py", "使用xx.py对捕获到的http包进行分析");
 
     putchar(10);
 }
@@ -109,7 +109,7 @@ int nss_option_get(int argc, char** argv)
         {"proto",required_argument, NULL, NSS_PROTO},
         {"bpf",  required_argument, NULL, 'b'},
 #define NSS_SCRIPT 259
-        {"script", required_argument, NULL, NSS_SCRIPT},
+        {"script-http", required_argument, NULL, NSS_SCRIPT},
         {NULL, 0, NULL, 0}
     };
     while (-1 != (opt = getopt_long(argc, argv, short_options, long_options, NULL))) {
@@ -234,13 +234,13 @@ int nss_option_get(int argc, char** argv)
                 break;
             }
             case NSS_SCRIPT: {
-                nss_opt.script = (char*)malloc(strlen(optarg) + sizeof(SCRIPT_DIR) + 1);
+                nss_opt.script = (char*)malloc(strlen(optarg) + sizeof(HTTP_SCRIPT_DIR) + 1);
                 if (NULL == nss_opt.script) {
                     nss_print_err("No enough memory when handle option\n");
                     exit(NSS_NOMEM);
                 }
                 else
-                    sprintf(nss_opt.script, "%s%s", SCRIPT_DIR, optarg);
+                    sprintf(nss_opt.script, "%s%s", HTTP_SCRIPT_DIR, optarg);
 
                 break;
             }

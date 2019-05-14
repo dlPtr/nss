@@ -18,7 +18,7 @@ int nss_callback_analyze(pcap_t* handle, const nss_opt_t opt)
     
     pid_t pid = fork();
     if (0 == pid)
-        execlp("python3", "python3", opt.script, NULL);
+        execlp("python3", "python3", opt.script, filename, NULL);
     else
         wait(NULL);
 
