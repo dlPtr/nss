@@ -60,7 +60,7 @@ void nss_print_usage(void)
     printf("  %-15s\t%-s\n",\
 "-P --port number", "截获来自端口号number的所有数据包");
     printf("  %-15s\t%-s\n",\
-"--portange=n1-n2", "截获来自端口号为n1-n2之间的所有数据包");
+"--portrange=n1-n2", "截获来自端口号为n1-n2之间的所有数据包");
     printf("  %-15s\t%-s\n",\
 "-s --src address", "截获源地址为address的所有数据包");
     printf("  %-15s\t%-s\n",\

@@ -15,13 +15,15 @@ nss_get_http() returns a turple (request, response) read from .pcap file.
         "body": <class str> # Only 'POST' Request and Response has body
     }
     '''
+    request  = []
+    response = []
+    
     # Open .pcap file
     f = open(filename, "rb")
     # Read from fileobject
     pcap = dpkt.pcap.Reader(f)
     # For each packet in the pcap process the contents
-    request  = []
-    response = []
+    
     for timestamp, buf in pcap:
         # Unpack the Ethernet frame (mac src/dst, ethertype)
         eth = dpkt.ethernet.Ethernet(buf)
@@ -57,6 +59,7 @@ nss_get_http() returns a turple (request, response) read from .pcap file.
                 + '.' + str(ip.dst[1])\
                 + '.' + str(ip.dst[2])\
                 + '.' + str(ip.dst[3])
+            req_dict["seq"] = tcp.seq
             req_dict["headers"] = mess.headers
 
             if "POST" == mess.method:
@@ -64,7 +67,7 @@ nss_get_http() returns a turple (request, response) read from .pcap file.
 
             request.append(req_dict)
             continue
-        except (dpkt.dpkt.NeedData, dpkt.dpkt.UnpackError):
+        except:
             pass
 
         # Now see if we can parse the contents as a HTTP response
@@ -85,6 +88,7 @@ nss_get_http() returns a turple (request, response) read from .pcap file.
                 + '.' + str(ip.dst[1])\
                 + '.' + str(ip.dst[2])\
                 + '.' + str(ip.dst[3])
+            res_dict["seq"] = tcp.seq
             res_dict["headers"] = mess.headers
             
             # Check if has content-encoding and decode if has
@@ -102,8 +106,80 @@ nss_get_http() returns a turple (request, response) read from .pcap file.
 
             response.append(res_dict)
             continue
-        except (dpkt.dpkt.NeedData, dpkt.dpkt.UnpackError):
+        except:
             pass
 
     f.close()
     return (request, response)
+
+def nss_gen_report(message, pattern, result):
+    '''
+    Generate report based on:
+            1. http message<dict>,
+            2. regex pattern<str>,
+            3. search result<string>.
+    return a string.
+    '''
+    if "uri" in message:
+        return "[%-4x] [%-6s]  [%-20s] [%-15s] -> [%-15s] [%-20s] [%-20s]" %(\
+             message["seq"],\
+             message["method"],\
+             message["headers"].get("host", "") + message["uri"],\
+             message["src"],\
+             message["dst"],\
+             "\"" + pattern + "\"",\
+             "\"" + result.group(0) + "\"",\
+        )
+    elif "status" in message:
+        return "[%-4x] [%-6s]  [%-15s] -> [%-15s] [%-20s] [%-20s]" %(\
+             message["seq"],\
+             message["reason"],\
+             message["src"],\
+             message["dst"],\
+             "\"" + pattern + "\"",\
+             "\"" + result.group(0) + "\"",\
+        )
+    else:
+        return "Generate failed."
+
+def nss_gen_report_format(isRequest = True):
+    if isRequest:
+        nss_sql_print('-' * 92)
+        nss_sql_print("%-8s\t%-8s\t%-8s\t%-8s->%-8s\t%-8s\t%-8s |" %(\
+            "Tcp-Seq",\
+            "Method",\
+            "Referer",\
+            "IP-Src",\
+            "IP-Dst",\
+            "Pattern",\
+            "Result",\
+            )
+        )
+        nss_sql_print('-' * 92)
+    else:
+        nss_sql_print('-' * 76)
+        nss_sql_print("%-8s\t%-8s\t%-8s->%-8s\t%-8s\t%-8s |" %(\
+            "Tcp-Seq",\
+            "Reason",\
+            "IP-Src",\
+            "IP-Dst",\
+            "Pattern",\
+            "Result",\
+            )
+        )
+        nss_sql_print('-' * 76)
+
+def _nss_print(str="", error=False, prefix="http"):
+    if not error:
+        print("\033[1;32m%s +\033[0m " % (prefix) + str)
+    else:
+        print("\033[1;31m%s +\033[0m " % (prefix)+ str)
+
+def nss_sql_print(str="", error=False):
+    _nss_print(str, error, "SQL")
+    
+def nss_xss_print(str="", error=False):
+    _nss_print(str, error, "XSS")
+
+def nss_evil_print(str, prefix="HTTP"):
+    print("\033[1;31m%s + %s\033[0m" % (prefix, str))
