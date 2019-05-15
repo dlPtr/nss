@@ -13,9 +13,7 @@ $(TARGET):$(SRC) $(INCLUDE)
 
 .PHONY:install
 install:
-	cp ./lib/* /usr/local/lib
-	ldconfig
-
+	cp nss /usr/bin
 .PHONY:clean
 clean:
 	rm -f nss
