@@ -12,6 +12,7 @@ int nss_run(int argc, char* argv[])
     int ret = 0;
 
     if (nss_if_captrueMode())
+        /* Captrue Mode */
         ret = nss_captrue_alive(argc, argv);
     else
         /* Read file Mode */
