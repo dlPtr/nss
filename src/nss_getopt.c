@@ -281,7 +281,7 @@ void nss_option_free(void)
 
 nss_bool nss_if_captrueMode(void)
 {
-    return !nss_opt.ifRead;
+    return !nss_opt.ifRead ? 1 : 0;
 }
 
 nss_bool nss_if_dump(void)
@@ -291,7 +291,7 @@ nss_bool nss_if_dump(void)
 
 nss_bool nss_if_analyze(void)
 {
-    return (NULL != nss_opt.script);
+    return (NULL != nss_opt.script) ? 1 : 0;
 }
 
 const char* nss_get_rFileName(void)
