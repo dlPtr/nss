@@ -281,7 +281,6 @@ void nss_option_free(void)
 
 nss_bool nss_if_captrueMode(void)
 {
-    return !nss_opt.ifRead;
     return !nss_opt.ifRead ? 1 : 0;
 }
 
