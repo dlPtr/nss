@@ -51,11 +51,11 @@ def main():
     hp.nss_xss_print("Handling Request Packages..")
     try:
         ret = nss_search(request, "xss.dict")
-        hp.nss_gen_report_format()
+        hp.nss_xss_print_format()
         for i in ret:
             for j in range(len(i[1])):
                 try:
-                    hp.nss_evil_print(hp.nss_gen_report(i[0], i[1][j], i[2][j]))
+                    hp.nss_evil_print(hp.nss_gen_report(i[0], i[1][j], i[2][j]), "XSS")
                 except:
                     hp.nss_xss_print("Error detected when generate Request reports..")
                     hp.nss_xss_print("Python3 quit..\n", True)
@@ -70,11 +70,11 @@ def main():
     hp.nss_xss_print("Handling Response Packages..")
     try:
         ret = nss_search(response, "xss.dict")
-        hp.nss_gen_report_format(False)
+        hp.nss_xss_print_format(False)
         for i in ret:
             for j in range(len(i[1])):
                 try:
-                    hp.nss_evil_print(hp.nss_gen_report(i[0], i[1][j], i[2][j]))
+                    hp.nss_evil_print(hp.nss_gen_report(i[0], i[1][j], i[2][j]), "XSS")
                 except:
                     hp.nss_xss_print("Error detected when generate Response reports..")
                     hp.nss_xss_print("Python3 quit..\n", True)
