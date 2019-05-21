@@ -50,7 +50,7 @@ hp.nss_sql_print()
 hp.nss_sql_print("Handling Request Packages..")
 try:
     ret = nss_search(request, "sql.dict")
-    hp.nss_gen_report_format()
+    hp.nss_sql_print_format()
     for i in ret:
         for j in range(len(i[1])):
             try:
@@ -69,7 +69,7 @@ hp.nss_sql_print()
 hp.nss_sql_print("Handling Response Packages..")
 try:
     ret = nss_search(response, "sql.dict")
-    hp.nss_gen_report_format(False)
+    hp.nss_sql_print_format()
     for i in ret:
         for j in range(len(i[1])):
             try:
