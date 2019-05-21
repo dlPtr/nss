@@ -142,10 +142,15 @@ def nss_gen_report(message, pattern, result):
     else:
         return "Generate failed."
 
-def nss_gen_report_format(isRequest = True):
+def nss_sql_print_format(isRequest = True):
+    nss_gen_report_format("SQL", isRequest)
+def nss_xss_print_format(isRequest = True):
+    nss_gen_report_format("XSS", isRequest)
+
+def nss_gen_report_format(prefix="http", isRequest = True):
     if isRequest:
-        nss_sql_print('-' * 92)
-        nss_sql_print("%-8s\t%-8s\t%-8s\t%-8s->%-8s\t%-8s\t%-8s |" %(\
+        _nss_print('-' * 92, False, prefix)
+        _nss_print("%-8s\t%-8s\t%-8s\t%-8s->%-8s\t%-8s\t%-8s |" %(\
             "Tcp-Seq",\
             "Method",\
             "Referer",\
@@ -153,21 +158,25 @@ def nss_gen_report_format(isRequest = True):
             "IP-Dst",\
             "Pattern",\
             "Result",\
-            )
+            ),
+            False,
+            prefix
         )
-        nss_sql_print('-' * 92)
+        _nss_print('-' * 92, False, prefix)
     else:
-        nss_sql_print('-' * 76)
-        nss_sql_print("%-8s\t%-8s\t%-8s->%-8s\t%-8s\t%-8s |" %(\
+        _nss_print('-' * 76, False, prefix)
+        _nss_print("%-8s\t%-8s\t%-8s->%-8s\t%-8s\t%-8s |" %(\
             "Tcp-Seq",\
             "Reason",\
             "IP-Src",\
             "IP-Dst",\
             "Pattern",\
             "Result",\
-            )
+            ),
+            False,
+            prefix
         )
-        nss_sql_print('-' * 76)
+        _nss_print('-' * 76, False, prefix)
 
 def _nss_print(str="", error=False, prefix="http"):
     if not error:
