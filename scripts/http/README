@@ -1,0 +1,14 @@
+
+nss_get_http(filename)
+    nss_get_http() returns a turple (request, response) read from .pcap file.
+    
+        type of (request/response) is dict: {
+            "method"/"reason": <class str>
+            "uri"/"status": <class str>
+            "version": <class str>
+            "src": <class str> # ip source
+            "dst": <class str> # ip destination
+            "headers": <class 'collections.OrderedDict'> # General http headers
+            "body": <class str> # Only 'POST' Request and Response has body
+        }
+
