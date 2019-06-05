@@ -1,2 +1,2 @@
 # nss
-Network Sniff-a light sniffer based on libpcap
+Network Sniff - a light sniffer based on libpcap
